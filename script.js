@@ -13,21 +13,33 @@ function placeOrder() {
 }
 
 function prepareFood() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         status.textContent = "Status: Preparing food..."
         setTimeout(() => {
-            status.textContent = "Status: Food ready!"
-            resolve("Food ready!")
+             const foodPrepared = Math.random() > 0.2
+
+            if (foodPrepared) {
+                status.textContent = "Status: Food ready!"
+                resolve("Food ready!")
+            } else {
+                reject(new Error("Restaurant failed to prepare the food"))
+            }
         }, 3000)
     })
 }
 
 function packFood() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         status.textContent = "Status: Packing food..."
         setTimeout(() => {
-            status.textContent = "Status: Food packed"
-            resolve("Food packed")
+             const foodPacked = Math.random() > 0.1
+
+            if (foodPacked) {
+                status.textContent = "Status: Food packed"
+                resolve("Food packed")
+            } else {
+                reject(new Error("Food packaging failed"))
+            }
         }, 2000)
     })
 }
@@ -66,24 +78,33 @@ orderButton.addEventListener("click", () => {
         status.textContent = "Status: Ready to order"
         orderButton.textContent = "PLACE ORDER"
     } else {
-        placeOrder().then((message) => {
-            console.log(message)
-            return prepareFood()
-        }).then((message) => {
-            console.log(message)
-            return packFood()
-        }).then((message) => {
-            console.log(message)
-            return assignRider()
-        }).then((message) => {
-            console.log(message)
-            return deliverOrder()
-        }).catch((error) => {
-            console.log(error.message)
-            status.textContent = error.message
-            orderButton.textContent = "TRY AGAIN"
-        }).finally(() => {
-            status.textContent = "Status: Order process completed"
-        })
+        placeOrder()
+    .then((message) => {
+        console.log(message)
+        return prepareFood()
+    })
+    .then((message) => {
+        console.log(message)
+        return packFood()
+    })
+    .then((message) => {
+        console.log(message)
+        return assignRider()
+    })
+    .then((message) => {
+        console.log(message)
+        return deliverOrder()
+    })
+    .then((message) => {
+        console.log(message)
+    })
+    .catch((error) => {
+        console.log(error.message)
+        status.textContent = error.message
+        orderButton.textContent = "TRY AGAIN"
+    })
+    .finally(() => {
+        console.log("Status: Order process completed")
+    })
     }
 })
