@@ -1,59 +1,68 @@
 const orderButton = document.getElementById("order-btn")
 const status = document.getElementById("status-el")
-let orderCompleted = false
+let orderStatus = "ready"
+
+function updateStatus(message) {
+    status.textContent = `${message}`
+}
+
+function updateButton() {
+    if (orderStatus === "ready") {
+        orderButton.textContent = "PLACE ORDER"
+        orderButton.disabled = false
+    } else if (orderStatus === "processing") {
+        orderButton.textContent = "PROCESSING..."
+        orderButton.disabled = true
+    } else if (orderStatus === "completed") {
+        orderButton.textContent = "PLACE ANOTHER ORDER"
+        orderButton.disabled = false
+    } else if (orderStatus === "failed") {
+        orderButton.textContent = "TRY AGAIN"
+        orderButton.disabled = false
+    }
+}
+updateButton()
 
 function placeOrder() {
     return new Promise((resolve) => {
-        status.textContent = "Status: Order placed!"
+        updateStatus("Order placed!")
         setTimeout(() => {
-            status.textContent = "Status: Restaurant confirmed!"
+           updateStatus("Restaurant confirmed!")
             resolve("Restaurant confirmed!")
         }, 2000)
     })
 }
 
 function prepareFood() {
-    return new Promise((resolve, reject) => {
-        status.textContent = "Status: Preparing food..."
+    return new Promise((resolve) => {
+        updateStatus("Preparing food...")
         setTimeout(() => {
-             const foodPrepared = Math.random() > 0.2
-
-            if (foodPrepared) {
-                status.textContent = "Status: Food ready!"
+                updateStatus("Food ready!")
                 resolve("Food ready!")
-            } else {
-                reject(new Error("Restaurant failed to prepare the food"))
-            }
         }, 3000)
     })
 }
 
 function packFood() {
-    return new Promise((resolve, reject) => {
-        status.textContent = "Status: Packing food..."
+    return new Promise((resolve) => {
+        updateStatus("Packing food...")
         setTimeout(() => {
-             const foodPacked = Math.random() > 0.1
-
-            if (foodPacked) {
-                status.textContent = "Status: Food packed"
+                updateStatus("Food packed")
                 resolve("Food packed")
-            } else {
-                reject(new Error("Food packaging failed"))
-            }
         }, 2000)
     })
 }
 
 function assignRider() {
     return new Promise((resolve, reject) => {
-        status.textContent = "Status: Finding delivery partner..."
+        updateStatus("Finding delivery partner...")
         setTimeout(() => {
             const isRiderAssigned = Math.random() > 0.5
             if(isRiderAssigned) {
-                status.textContent = "Status: Delivery partner assigned"
+                updateStatus("Delivery partner assigned")
                 resolve("Delivery partner assigned")
             } else {
-                status.textContent = "Status: No delivery partner available"
+                updateStatus("No delivery partner available")
                 reject(new Error("No delivery partner available"))
             }
         }, 2000)
@@ -62,49 +71,46 @@ function assignRider() {
 
 function deliverOrder() {
     return new Promise((resolve) => {
-        status.textContent = "Status: Out for delivery"
+        updateStatus("Out for delivery")
         setTimeout(() => {
-            status.textContent = "Status: Order delivered!"
-            orderCompleted = true
-            orderButton.textContent = "PLACE ANOTHER ORDER"
+            updateStatus("Order delivered!")
+            orderStatus = "completed"
+            updateButton()
             resolve("Order delivered!")
         }, 3000)
     })
 }
 
-orderButton.addEventListener("click", () => {
-    if(orderCompleted) {
-        orderCompleted = false
-        status.textContent = "Status: Ready to order"
-        orderButton.textContent = "PLACE ORDER"
-    } else {
-        placeOrder()
-    .then((message) => {
+async function processOrder() {
+    orderStatus = "processing"
+    updateButton()
+    try {
+        const message = await placeOrder()
         console.log(message)
-        return prepareFood()
-    })
-    .then((message) => {
-        console.log(message)
-        return packFood()
-    })
-    .then((message) => {
-        console.log(message)
-        return assignRider()
-    })
-    .then((message) => {
-        console.log(message)
-        return deliverOrder()
-    })
-    .then((message) => {
-        console.log(message)
-    })
-    .catch((error) => {
+        const foodMessage = await prepareFood()
+        console.log(foodMessage)
+        const packedMessage = await packFood()
+        console.log(packedMessage)
+        const riderMessage = await assignRider()
+        console.log(riderMessage)
+        const deliveryMessage = await deliverOrder()
+        console.log(deliveryMessage)
+    } catch(error) {
         console.log(error.message)
-        status.textContent = error.message
-        orderButton.textContent = "TRY AGAIN"
-    })
-    .finally(() => {
-        console.log("Status: Order process completed")
-    })
+        orderStatus = "failed"
+        updateStatus(error.message)
+        updateButton()
+    } finally {
+        console.log("Order Process Completed")
+    }
+}
+
+orderButton.addEventListener("click", () => {
+    if(orderStatus === "completed") {
+        orderStatus = "ready"
+        updateStatus("Ready to order")
+        updateButton()
+    } else if (orderStatus === "failed" || orderStatus === "ready") {
+        processOrder()
     }
 })
