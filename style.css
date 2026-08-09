@@ -115,6 +115,40 @@ h1 {
     font-weight: 600;
 }
 
+.food-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 24px 0;
+}
+
+.food-selection label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.food-selection select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.food-selection select:focus {
+    border-color: #ff9f43;
+}
+
+.food-selection select:disabled {
+    background: #f3f3f3;
+    color: #999;
+    cursor: not-allowed;
+}
+
 #status-box{
     display: flex;
     align-items: center;
@@ -296,6 +330,10 @@ h1 {
     }
     .step-label {
         line-height: 1.3;
+    }
+    .order-details {
+        flex-direction: column;
+        gap: 14px;
     }
 }
 

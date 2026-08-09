@@ -6,7 +6,25 @@ const stepPack = document.getElementById("step-pack")
 const stepRider = document.getElementById("step-rider")
 const stepDelivery = document.getElementById("step-delivery")
 const progressLineFill = document.getElementById("progress-line-fill")
+const customer = document.getElementById("customer-el")
+const food = document.getElementById("food-el")
+const foodSelect = document.getElementById('food-select')
+
+const order = {
+    customer: "Rahul",
+    food: "Pizza"
+}
 let orderStatus = "ready"
+
+function displayOrder() {
+    customer.textContent = order.customer
+    food.textContent = order.food
+}
+
+foodSelect.addEventListener("change", () => {
+    order.food = foodSelect.value
+    displayOrder()
+})
 
 function updateProgress(step, state = "active") {
     const steps = [
@@ -83,15 +101,19 @@ function updateButton() {
     if (orderStatus === "ready") {
         orderButton.textContent = "PLACE ORDER"
         orderButton.disabled = false
+        foodSelect.disabled = false
     } else if (orderStatus === "processing") {
         orderButton.textContent = "PROCESSING..."
         orderButton.disabled = true
+        foodSelect.disabled = true
     } else if (orderStatus === "completed") {
         orderButton.textContent = "PLACE ANOTHER ORDER"
         orderButton.disabled = false
+        foodSelect.disabled = false
     } else if (orderStatus === "failed") {
         orderButton.textContent = "TRY AGAIN"
         orderButton.disabled = false
+        foodSelect.disabled = false
     }
 }
 updateButton()

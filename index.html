@@ -15,20 +15,29 @@
             <i class="fa-solid fa-pizza-slice logo"></i>
             <h1>Foodie Tracker</h1>
             <p class="subtitle">Track your order from kitchen to doorstep</p>
+            <div class="food-selection">
+                <label for="food-select">Choose your food</label>
+                <select id="food-select">
+                    <option value="Margherita Pizza">Margherita Pizza</option>
+                    <option value="Veg Burger">Veg Burger</option>
+                    <option value="Pasta">Pasta</option>
+                    <option value="French Fries">French Fries</option>
+                </select>
+            </div>
             <div class="order-details">
                 <div class="detail">
                     <span>
                         <span class="icon"><i class="fa-regular fa-user"></i></span>
                         <span class="label">Customer</span>
                     </span>
-                    <span class="value">Isheta</span>
+                    <span class="value" id="customer-el">Isheta</span>
                 </div>
                 <div class="detail">
                     <span>
                         <span class="icon"><i class="fa-regular fa-lemon"></i></span>
                         <span class="label">Food</span>
                     </span>
-                    <span class="value">🍕 Margherita Pizza</span>
+                    <span class="value" id="food-el">🍕 Margherita Pizza</span>
                 </div>
             </div>
             <div id="status-box">
