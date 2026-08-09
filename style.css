@@ -144,10 +144,9 @@ h1 {
 }
 
 #status-el {
-    margin-top: 3px;
-    color: #4a3525;
-    font-size: 15px;
-    font-weight: 600;
+    margin-top: 5px;
+    color: #2d2118;
+    font-weight: 700;
 }
 
 #order-btn {
@@ -173,7 +172,96 @@ h1 {
     transform: translateY(0);
 }
 
-@media (max-width: 480px) {
+#order-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.progress-tracker {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 30px 0;
+}
+
+.progress-line {
+    position: absolute;
+    left: 14px;
+    top: 15px;
+    bottom: 15px;
+    width: 2px;
+    background: #e5e5e5;
+    z-index: 0;
+}
+
+.progress-line-fill {
+    width: 100%;
+    height: 0;
+    background: #4caf50;
+    transition: height 0.4s ease;
+}
+
+.progress-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+.step-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    background: white;
+}
+
+.progress-step.active {
+    opacity: 1;
+}
+
+.progress-step.completed .step-icon {
+    background: #4caf50;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+.progress-step.failed {
+    opacity: 1;
+}
+
+.progress-step.failed .step-icon {
+    background: #e74c3c;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+.progress-step:not(.active):not(.completed):not(.failed) .step-icon {
+    border: 2px solid #ddd;
+    color: #aaa;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 600px) {
     .tracker-card {
         padding: 30px 22px;
         border-radius: 24px;
@@ -188,5 +276,31 @@ h1 {
     .blob-yellow {
         width: 250px;
         height: 250px;
+    }
+    .progress-tracker {
+        gap: 18px;
+        margin: 24px 0;
+    }
+    .progress-step {
+        gap: 10px;
+        font-size: 0.9rem;
+    }
+    .step-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+    .progress-line {
+        left: 13px;
+    }
+    .step-label {
+        line-height: 1.3;
+    }
+}
+
+@media (max-width: 400px) {
+    .step-label {
+        font-size: 0.85rem;
     }
 }

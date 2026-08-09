@@ -1,6 +1,79 @@
 const orderButton = document.getElementById("order-btn")
 const status = document.getElementById("status-el")
+const stepOrder = document.getElementById("step-order")
+const stepFood = document.getElementById("step-food")
+const stepPack = document.getElementById("step-pack")
+const stepRider = document.getElementById("step-rider")
+const stepDelivery = document.getElementById("step-delivery")
+const progressLineFill = document.getElementById("progress-line-fill")
 let orderStatus = "ready"
+
+function updateProgress(step, state = "active") {
+    const steps = [
+        stepOrder,
+        stepFood,
+        stepPack,
+        stepRider,
+        stepDelivery
+    ]
+    const stepIndex = {
+        order: 0,
+        food: 1,
+        pack: 2,
+        rider: 3,
+        delivery: 4
+    }
+    steps.forEach((element, index) => {
+        element.classList.remove("active","completed", "failed")
+        const icon = element.querySelector(".step-icon")
+        if(index < stepIndex[step]) {
+            element.classList.add("completed")
+        }
+        if (index === stepIndex[step]) {
+            element.classList.add(state)
+            if (state === "active") {
+                icon.textContent = "●"
+            }
+            else if (state === "failed") {
+                icon.textContent = "✕"
+            }
+        }
+        else {
+            icon.textContent = "○"
+        }
+    })
+    const currentIndex = stepIndex[step]
+    let completedIndex = currentIndex
+    if (state === "active") {
+        completedIndex = currentIndex - 1
+    }
+    if (state === "failed") {
+        completedIndex = currentIndex - 1
+    }
+    if (completedIndex < 0) {
+        completedIndex = 0
+    }
+    const progressPercentage = (currentIndex / (steps.length - 1))*100
+    progressLineFill.style.height = `${progressPercentage}%`
+}
+
+function resetProgress() {
+    progressLineFill.style.height = "0%"
+    const steps = [
+        stepOrder,
+        stepFood,
+        stepPack,
+        stepRider,
+        stepDelivery
+    ]
+    steps.forEach((element, index) => {
+        element.classList.remove("active","completed", "failed")
+        const icon = element.querySelector(".step-icon")
+        icon.textContent = "○"
+    })
+    
+}
+resetProgress()
 
 function updateStatus(message) {
     status.textContent = `${message}`
@@ -26,6 +99,7 @@ updateButton()
 function placeOrder() {
     return new Promise((resolve) => {
         updateStatus("Order placed!")
+        updateProgress("order")
         setTimeout(() => {
            updateStatus("Restaurant confirmed!")
             resolve("Restaurant confirmed!")
@@ -36,6 +110,7 @@ function placeOrder() {
 function prepareFood() {
     return new Promise((resolve) => {
         updateStatus("Preparing food...")
+        updateProgress("food")
         setTimeout(() => {
                 updateStatus("Food ready!")
                 resolve("Food ready!")
@@ -46,6 +121,7 @@ function prepareFood() {
 function packFood() {
     return new Promise((resolve) => {
         updateStatus("Packing food...")
+        updateProgress("pack")
         setTimeout(() => {
                 updateStatus("Food packed")
                 resolve("Food packed")
@@ -60,9 +136,11 @@ function assignRider() {
             const isRiderAssigned = Math.random() > 0.5
             if(isRiderAssigned) {
                 updateStatus("Delivery partner assigned")
+                updateProgress("rider")
                 resolve("Delivery partner assigned")
             } else {
                 updateStatus("No delivery partner available")
+                updateProgress("rider", "failed")
                 reject(new Error("No delivery partner available"))
             }
         }, 2000)
@@ -72,8 +150,10 @@ function assignRider() {
 function deliverOrder() {
     return new Promise((resolve) => {
         updateStatus("Out for delivery")
+        updateProgress("delivery")
         setTimeout(() => {
             updateStatus("Order delivered!")
+            updateProgress("delivery", "completed")
             orderStatus = "completed"
             updateButton()
             resolve("Order delivered!")
@@ -110,6 +190,7 @@ orderButton.addEventListener("click", () => {
         orderStatus = "ready"
         updateStatus("Ready to order")
         updateButton()
+        resetProgress()
     } else if (orderStatus === "failed" || orderStatus === "ready") {
         processOrder()
     }
