@@ -9,11 +9,13 @@ const progressLineFill = document.getElementById("progress-line-fill")
 const customer = document.getElementById("customer-el")
 const food = document.getElementById("food-el")
 const foodSelect = document.getElementById('food-select')
+const customerInput = document.getElementById("customer-input")
 
 const order = {
-    customer: "Rahul",
-    food: "Pizza"
+    customer: "",
+    food: "Margherita Pizza"
 }
+
 let orderStatus = "ready"
 
 function displayOrder() {
@@ -23,6 +25,11 @@ function displayOrder() {
 
 foodSelect.addEventListener("change", () => {
     order.food = foodSelect.value
+    displayOrder()
+})
+
+customerInput.addEventListener("input", () => {
+    order.customer = customerInput.value
     displayOrder()
 })
 
@@ -55,22 +62,15 @@ function updateProgress(step, state = "active") {
             else if (state === "failed") {
                 icon.textContent = "✕"
             }
+            else if (state === "completed") {
+                icon.textContent = "✓"
+            }
         }
         else {
             icon.textContent = "○"
         }
     })
     const currentIndex = stepIndex[step]
-    let completedIndex = currentIndex
-    if (state === "active") {
-        completedIndex = currentIndex - 1
-    }
-    if (state === "failed") {
-        completedIndex = currentIndex - 1
-    }
-    if (completedIndex < 0) {
-        completedIndex = 0
-    }
     const progressPercentage = (currentIndex / (steps.length - 1))*100
     progressLineFill.style.height = `${progressPercentage}%`
 }
@@ -102,18 +102,22 @@ function updateButton() {
         orderButton.textContent = "PLACE ORDER"
         orderButton.disabled = false
         foodSelect.disabled = false
+        customerInput.disabled = false
     } else if (orderStatus === "processing") {
         orderButton.textContent = "PROCESSING..."
         orderButton.disabled = true
         foodSelect.disabled = true
+        customerInput.disabled = true
     } else if (orderStatus === "completed") {
         orderButton.textContent = "PLACE ANOTHER ORDER"
         orderButton.disabled = false
         foodSelect.disabled = false
+        customerInput.disabled = false
     } else if (orderStatus === "failed") {
         orderButton.textContent = "TRY AGAIN"
         orderButton.disabled = false
         foodSelect.disabled = false
+        customerInput.disabled = false
     }
 }
 updateButton()
@@ -183,6 +187,16 @@ function deliverOrder() {
     })
 }
 
+function validateOrder() {
+    const customerName = customerInput.value.trim()
+    if (customerName === "") {
+        updateStatus("Please enter your name")
+        customerInput.focus()
+        return false
+    }
+    return true
+}
+
 async function processOrder() {
     orderStatus = "processing"
     updateButton()
@@ -213,7 +227,16 @@ orderButton.addEventListener("click", () => {
         updateStatus("Ready to order")
         updateButton()
         resetProgress()
+        customerInput.value = ""
+        order.customer = ""
+        customer.textContent = "Guest"
     } else if (orderStatus === "failed" || orderStatus === "ready") {
+        if (!validateOrder()) {
+            return
+        }
+        order.customer = customerInput.value.trim()
+        displayOrder()
+        resetProgress()
         processOrder()
     }
 })

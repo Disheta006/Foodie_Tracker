@@ -98,10 +98,13 @@ h1 {
 
 .icon {
     margin: 0 2px;
-    padding: 5px 5px;
+    padding: 6px 5px;
     background-color: rgb(253, 190, 73);
     color: white;
-    border-radius: 50px;
+    border-radius: 100px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .label {
@@ -113,6 +116,39 @@ h1 {
     color: #3b2b20;
     font-size: 1rem;
     font-weight: 600;
+}
+
+.name-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 5px 0;
+}
+
+.name-detail label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+}
+
+#customer-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    box-sizing: border-box;
+}
+
+#customer-input:focus {
+    border-color: #ff9f43;
+}
+
+#customer-input:disabled {
+    background: #f3f3f3;
+    color: #999;
+    cursor: not-allowed;
 }
 
 .food-selection {
@@ -334,11 +370,5 @@ h1 {
     .order-details {
         flex-direction: column;
         gap: 14px;
-    }
-}
-
-@media (max-width: 400px) {
-    .step-label {
-        font-size: 0.85rem;
     }
 }

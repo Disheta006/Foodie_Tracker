@@ -15,26 +15,34 @@
             <i class="fa-solid fa-pizza-slice logo"></i>
             <h1>Foodie Tracker</h1>
             <p class="subtitle">Track your order from kitchen to doorstep</p>
-            <div class="food-selection">
-                <label for="food-select">Choose your food</label>
-                <select id="food-select">
-                    <option value="Margherita Pizza">Margherita Pizza</option>
-                    <option value="Veg Burger">Veg Burger</option>
-                    <option value="Pasta">Pasta</option>
-                    <option value="French Fries">French Fries</option>
-                </select>
-            </div>
             <div class="order-details">
-                <div class="detail">
-                    <span>
-                        <span class="icon"><i class="fa-regular fa-user"></i></span>
-                        <span class="label">Customer</span>
-                    </span>
-                    <span class="value" id="customer-el">Isheta</span>
+                <div class="name-detail">
+                    <label for="customer-input">Enter your name</label>
+                    <input type="text" id="customer-input" placeholder="Enter your name">
                 </div>
                 <div class="detail">
                     <span>
-                        <span class="icon"><i class="fa-regular fa-lemon"></i></span>
+                        <span class="icon">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <span class="label">Customer</span>
+                    </span>
+                    <span class="value" id="customer-el">Guest</span>
+                </div>
+                <div class="food-selection">
+                    <label for="food-select">Choose your food</label>
+                    <select id="food-select">
+                        <option value="Margherita Pizza">Margherita Pizza</option>
+                        <option value="Veg Burger">Veg Burger</option>
+                        <option value="Pasta">Pasta</option>
+                        <option value="French Fries">French Fries</option>
+                    </select>
+                </div>
+                <div class="detail">
+                    <span>
+                        <span class="icon">
+                            <i class="fa-regular fa-lemon"></i>
+                        </span>
                         <span class="label">Food</span>
                     </span>
                     <span class="value" id="food-el">🍕 Margherita Pizza</span>
@@ -43,7 +51,7 @@
             <div id="status-box">
                 <span class="status-dot"></span>
                 <div>
-                    <span class="status-label">Current Status</p>
+                    <span class="status-label">Current Status</span>
                     <p id="status-el"></p>
                 </div>
             </div>
@@ -74,6 +82,6 @@
             </div>
         <button id="order-btn"><i class="fa-solid fa-bag-shopping"></i> PLACE ORDER</button>
     </main>
+    <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
 </html>
