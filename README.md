@@ -3,7 +3,7 @@
 A simple food order tracking web app built using HTML, CSS, and JavaScript.
 
 ## 🚀 Live Demo
-
+https://food-ie-tracker.netlify.app/
 
 ## 📸 Preview
 <img width="1350" height="2450" alt="127 0 0 1_5500_index html(Surface Duo) (1)" src="https://github.com/user-attachments/assets/03581449-81c0-4b86-999a-dd6ae0b974b2" />
